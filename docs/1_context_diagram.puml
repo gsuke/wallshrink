@@ -1,0 +1,7 @@
+@startuml Context diagram
+
+actor user
+note top: compress wallpaper image files
+
+user -> (wallshrink)
+note top: CLI application

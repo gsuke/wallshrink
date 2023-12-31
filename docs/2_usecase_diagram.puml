@@ -1,0 +1,26 @@
+@startuml Use case diagram
+left to right direction
+
+actor user
+
+package wallshrink {
+    usecase "specify target image files" as specify
+    note right: specify by directory
+
+    usecase "compress"
+    note right
+        * scale down
+        * convert image file format
+        * reduce the quality
+    endnote
+
+    usecase "check the results" as check
+    note right
+        * show files that have changed
+        * SSIM
+        * file size (data compression ratio)
+    endnote
+}
+
+user --> specify
+user --> check
