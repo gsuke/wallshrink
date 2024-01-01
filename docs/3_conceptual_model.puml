@@ -1,32 +1,33 @@
 @startuml Conceptual Model
 left to right direction
 
-object Directory
-object DirectoryPath
+object ImageSet
+object Path
 
-object File
-object FileSize
-object FileName
-object FileExtension
-object FileBaseName
-
-object Image
+object ImageFile
+object Size
 object Dimension
+
+object FileName
+object FileBaseName
+object FileExtension
+
 object SSIM
 
-note right of FileSize: unit is "Bytes"
+note top of ImageSet: is directory
+
+note right of Size: unit is "Bytes"
 note right of FileExtension: includes "."
 note right of Dimension: width * height
 
-Directory "1"--"1" DirectoryPath
-Directory "1"--"*" File
+ImageSet "1"--"1" Path
+ImageSet "1"--"*" ImageFile
 
-File "1"--"1" FileName
-File "1"--"1" FileSize
-File "1"--"0..1" Image
+ImageFile "1"--"1" Size
+ImageFile "1"--"1" Dimension
+ImageFile "1"--"1" FileName
 
 FileName "1"--"1" FileBaseName
 FileName "1"--"0..1" FileExtension
 
-Image "1"--"1" Dimension
-SSIM "1"--"2" Image
+SSIM "1"--"2" ImageFile
