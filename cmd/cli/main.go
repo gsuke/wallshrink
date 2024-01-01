@@ -1,6 +1,6 @@
 package main
 
-import "wallshrink/application/cli"
+import "wallshrink/presentation/cli"
 
 func main() {
 	cli.Execute()

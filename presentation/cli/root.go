@@ -7,11 +7,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-const (
-	defaultWidth  = 3840
-	defaultHeight = 2160
-)
-
 var rootCmd = &cobra.Command{
 	Use:   "wallshrink",
 	Short: "Wallshrink compresses the directory of wallpaper images.",
