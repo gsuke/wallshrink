@@ -1,7 +1,13 @@
 package usecase
 
-import "fmt"
+import (
+	"wallshrink/domain"
+
+	"github.com/samber/do"
+)
 
 func TestUseCase() {
-	fmt.Println("Hello, World!")
+	imageSetRepository := do.MustInvoke[domain.ImageSetRepository](nil)
+
+	imageSetRepository.LoadImageSet("foo")
 }

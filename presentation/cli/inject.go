@@ -7,7 +7,10 @@ import (
 )
 
 func inject() {
-	injecter := do.New()
+	// Default injector
+	do.Provide(nil, func(*do.Injector) (int, error) {
+		return 42, nil
+	})
 
-	do.Provide(injecter, repository.NewImageSetLocalFileRepository)
+	do.Provide(nil, repository.NewImageSetLocalFileRepository)
 }
