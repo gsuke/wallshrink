@@ -8,8 +8,8 @@ import (
 )
 
 const (
-	DEFAULT_WIDTH  = 3840
-	DEFAULT_HEIGHT = 2160
+	defaultWidth  = 3840
+	defaultHeight = 2160
 )
 
 var rootCmd = &cobra.Command{
@@ -35,14 +35,14 @@ func init() {
 	rootCmd.Flags().IntP(
 		"width",
 		"x",
-		DEFAULT_WIDTH,
-		fmt.Sprintf("Width to scale down the image (default %d)", DEFAULT_WIDTH),
+		defaultWidth,
+		fmt.Sprintf("Width to scale down the image (default %d)", defaultWidth),
 	)
 	rootCmd.Flags().IntP(
 		"height",
 		"y",
-		DEFAULT_HEIGHT,
-		fmt.Sprintf("Height to scale down the image (default %d)", DEFAULT_HEIGHT),
+		defaultHeight,
+		fmt.Sprintf("Height to scale down the image (default %d)", defaultHeight),
 	)
 }
 
