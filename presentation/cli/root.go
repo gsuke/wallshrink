@@ -3,13 +3,9 @@ package cli
 import (
 	"fmt"
 	"os"
+	"wallshrink/application/usecase"
 
 	"github.com/spf13/cobra"
-)
-
-const (
-	defaultWidth  = 3840
-	defaultHeight = 2160
 )
 
 var rootCmd = &cobra.Command{
@@ -25,6 +21,9 @@ var rootCmd = &cobra.Command{
 		fmt.Printf("Output: %s\n", output)
 		fmt.Printf("Width: %d\n", width)
 		fmt.Printf("Height: %d\n", height)
+
+		inject()
+		usecase.TestUseCase()
 	},
 }
 
