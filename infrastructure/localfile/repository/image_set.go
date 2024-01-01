@@ -2,6 +2,7 @@ package repository
 
 import (
 	"fmt"
+	"os"
 	"wallshrink/domain"
 
 	"github.com/samber/do"
@@ -14,6 +15,12 @@ func NewImageSetLocalFileRepository(i *do.Injector) (domain.ImageSetRepository, 
 }
 
 func (r *imageSetLocalFileRepository) LoadImageSet(path string) (*domain.ImageSet, []error) {
-	fmt.Println("Hello, World!")
+	files, _ := os.ReadDir(path)
+
+	// var imageFiles []domain.ImageFile
+	for _, f := range files {
+		fmt.Println(f.Name())
+	}
+
 	return nil, []error{}
 }

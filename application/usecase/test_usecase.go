@@ -6,8 +6,8 @@ import (
 	"github.com/samber/do"
 )
 
-func TestUseCase() {
+func TestUseCase(srcPath string) {
 	imageSetRepository := do.MustInvoke[domain.ImageSetRepository](nil)
 
-	imageSetRepository.LoadImageSet("foo")
+	imageSetRepository.LoadImageSet(srcPath)
 }

@@ -13,17 +13,12 @@ var rootCmd = &cobra.Command{
 	Short: "Wallshrink compresses the directory of wallpaper images.",
 	Run: func(cmd *cobra.Command, args []string) {
 		input, _ := cmd.Flags().GetString("input")
-		output, _ := cmd.Flags().GetString("output")
-		width, _ := cmd.Flags().GetInt("width")
-		height, _ := cmd.Flags().GetInt("height")
-
-		fmt.Printf("Input: %s\n", input)
-		fmt.Printf("Output: %s\n", output)
-		fmt.Printf("Width: %d\n", width)
-		fmt.Printf("Height: %d\n", height)
+		// output, _ := cmd.Flags().GetString("output")
+		// width, _ := cmd.Flags().GetInt("width")
+		// height, _ := cmd.Flags().GetInt("height")
 
 		inject()
-		usecase.TestUseCase()
+		usecase.TestUseCase(input)
 	},
 }
 
