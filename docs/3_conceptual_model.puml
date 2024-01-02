@@ -9,7 +9,7 @@ object Size
 object Dimension
 
 object FileName
-object FileBaseName
+object FileStem
 object FileExtension
 
 object SSIM
@@ -27,7 +27,7 @@ ImageFile "1"--"1" Size
 ImageFile "1"--"1" Dimension
 ImageFile "1"--"1" FileName
 
-FileName "1"--"1" FileBaseName
+FileName "1"--"1" FileStem
 FileName "1"--"0..1" FileExtension
 
 SSIM "1"--"2" ImageFile
