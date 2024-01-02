@@ -17,9 +17,11 @@ func run(cmd *cobra.Command, args []string) {
 
 	inject()
 	err := usecase.TestUseCase(input)
+
+	// Main error handle
 	if err != nil {
 		switch {
-		case errors.Is(err, domain.ErrDirectoryLoadFailed):
+		case errors.Is(err, domain.ErrImageSetLoadFailed):
 			log.Println(err)
 		default:
 			log.Fatalln(err)

@@ -20,7 +20,7 @@ func (r *imageSetLocalFileRepository) LoadImageSet(path string) (imageSet domain
 
 	files, err := os.ReadDir(path)
 	if err != nil {
-		return domain.ImageSet{}, nil, fmt.Errorf("%w: %s", domain.ErrDirectoryLoadFailed, err)
+		return domain.ImageSet{}, nil, fmt.Errorf("%w: %s", domain.ErrImageSetLoadFailed, err)
 	}
 
 	imageSet = domain.ImageSet{
