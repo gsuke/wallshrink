@@ -1,5 +1,5 @@
 package domain
 
 type ImageSetRepository interface {
-	LoadImageSet(path string) (*ImageSet, []error)
+	LoadImageSet(path string) (imageSet ImageSet, warnings []error, err error)
 }
