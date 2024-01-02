@@ -3,7 +3,8 @@ package repository
 import (
 	"context"
 	"errors"
-	"log"
+	"fmt"
+	"os"
 	"os/exec"
 	"path/filepath"
 	"strings"
@@ -18,7 +19,8 @@ type imageFileLocalFileRepository struct{}
 
 func NewImageFileLocalFileRepository(i *do.Injector) (domain.ImageFileRepository, error) {
 	if !isFFProbeAvailable() {
-		log.Fatalln(ErrFFProbeIsNotAvailable)
+		fmt.Println(ErrFFProbeIsNotAvailable)
+		os.Exit(1)
 	}
 	return &imageFileLocalFileRepository{}, nil
 }
@@ -45,7 +47,7 @@ func splitFileName(path string) (stem string, extension string) {
 
 // isFFProbeAvailable Checks if `ffprobe` is in $PATH.
 func isFFProbeAvailable() bool {
-	ffprobe.SetFFProbeBinPath("foo") // For Testing
+	// ffprobe.SetFFProbeBinPath("foo") // For Testing
 
 	ctx, cancelFn := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancelFn()
