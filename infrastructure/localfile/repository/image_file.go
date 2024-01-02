@@ -93,7 +93,7 @@ func getImageDimension(path string) (width int, height int, err error) {
 
 	data, err := ffprobe.ProbeURL(ctx, path)
 	if err != nil {
-		return 0, 0, err
+		return 0, 0, fmt.Errorf("%w: %s", domain.ErrImageInfoLoadFailed, err)
 	}
 
 	return data.Streams[0].Width, data.Streams[0].Height, nil

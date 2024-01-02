@@ -2,7 +2,6 @@ package repository
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"path/filepath"
 	"wallshrink/domain"
@@ -32,19 +31,14 @@ func (r *imageSetLocalFileRepository) LoadImageSet(path string) (imageSet domain
 	for i, f := range files {
 		imageFile, err := imageFileRepository.LoadImageFile(imageSet, filepath.Base(f.Name()))
 
-		// TODO: Handle error. Do not use Fatalln.
 		if err != nil {
-			log.Fatalln(err)
+			fmt.Println("[!] Failed to image information. The directory should contain only image files.")
+			fmt.Println(err)
 		}
 
 		imageSet.ImageFiles = append(imageSet.ImageFiles, imageFile)
-
-		printLoadInfo(i, len(files), path)
+		fmt.Printf("%d/%d: %s\n", i, len(files), imageFile.FullPath())
 	}
 
 	return imageSet, []error{}, nil
-}
-
-func printLoadInfo(current int, max int, path string) {
-	fmt.Printf("%d/%d: %s\n", current, max, path)
 }
