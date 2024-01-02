@@ -1,13 +1,22 @@
 package usecase
 
 import (
+	"fmt"
 	"wallshrink/domain"
 
 	"github.com/samber/do"
 )
 
-func TestUseCase() {
+func TestUseCase(srcPath string) error {
 	imageSetRepository := do.MustInvoke[domain.ImageSetRepository](nil)
 
-	imageSetRepository.LoadImageSet("foo")
+	imageSet, _, err := imageSetRepository.LoadImageSet(srcPath)
+	if err != nil {
+		return err
+	}
+
+	for _, f := range imageSet.ImageFiles {
+		fmt.Printf("%s %s\n", f.Stem, f.Extension)
+	}
+	return nil
 }
