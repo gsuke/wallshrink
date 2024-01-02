@@ -16,7 +16,7 @@ func TestUseCase(srcPath string) error {
 	}
 
 	for _, f := range imageSet.ImageFiles {
-		fmt.Println(f.BaseName)
+		fmt.Printf("%s %s\n", f.Stem, f.Extension)
 	}
 	return nil
 }

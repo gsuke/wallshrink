@@ -4,6 +4,6 @@ type ImageFile struct {
 	Size      int
 	Width     int
 	Height    int
-	BaseName  string
+	Stem      string
 	Extension string // includes "."
 }

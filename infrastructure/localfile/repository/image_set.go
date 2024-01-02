@@ -15,22 +15,19 @@ func NewImageSetLocalFileRepository(i *do.Injector) (domain.ImageSetRepository, 
 }
 
 func (r *imageSetLocalFileRepository) LoadImageSet(path string) (imageSet domain.ImageSet, warnings []error, err error) {
+	imageFileRepository := do.MustInvoke[domain.ImageFileRepository](nil)
+
 	files, err := os.ReadDir(path)
 	if err != nil {
 		return domain.ImageSet{}, nil, fmt.Errorf("%w: %s", domain.ErrDirectoryLoadFailed, err)
 	}
 
-	// Load Image Files
 	var imageFiles []domain.ImageFile
 	for _, f := range files {
-		imageFiles = append(imageFiles, domain.ImageFile{
-			// TODO
-			Size:      0,
-			Width:     0,
-			Height:    0,
-			BaseName:  f.Name(),
-			Extension: "",
-		})
+		// TODO: handle error
+		fullPath := path + "/" + f.Name()
+		imageFile, _ := imageFileRepository.LoadImageFile(fullPath)
+		imageFiles = append(imageFiles, imageFile)
 	}
 
 	return domain.ImageSet{
