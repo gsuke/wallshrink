@@ -1,16 +1,25 @@
 package repository
 
 import (
+	"context"
+	"errors"
+	"log"
+	"os/exec"
 	"path/filepath"
 	"strings"
+	"time"
 	"wallshrink/domain"
 
 	"github.com/samber/do"
+	"gopkg.in/vansante/go-ffprobe.v2"
 )
 
 type imageFileLocalFileRepository struct{}
 
 func NewImageFileLocalFileRepository(i *do.Injector) (domain.ImageFileRepository, error) {
+	if !isFFProbeAvailable() {
+		log.Fatalln(ErrFFProbeIsNotAvailable)
+	}
 	return &imageFileLocalFileRepository{}, nil
 }
 
@@ -32,4 +41,15 @@ func splitFileName(path string) (stem string, extension string) {
 	extension = filepath.Ext(path)
 	stem = strings.TrimSuffix(basename, extension)
 	return
+}
+
+// isFFProbeAvailable Checks if `ffprobe` is in $PATH.
+func isFFProbeAvailable() bool {
+	ffprobe.SetFFProbeBinPath("foo") // For Testing
+
+	ctx, cancelFn := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancelFn()
+
+	_, err := ffprobe.ProbeURL(ctx, "")
+	return !errors.Is(err, exec.ErrNotFound)
 }
