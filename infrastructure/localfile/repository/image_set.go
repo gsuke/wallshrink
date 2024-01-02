@@ -3,6 +3,7 @@ package repository
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 	"wallshrink/domain"
 
 	"github.com/samber/do"
@@ -22,16 +23,15 @@ func (r *imageSetLocalFileRepository) LoadImageSet(path string) (imageSet domain
 		return domain.ImageSet{}, nil, fmt.Errorf("%w: %s", domain.ErrDirectoryLoadFailed, err)
 	}
 
-	var imageFiles []domain.ImageFile
-	for _, f := range files {
-		// TODO: handle error
-		fullPath := path + "/" + f.Name()
-		imageFile, _ := imageFileRepository.LoadImageFile(fullPath)
-		imageFiles = append(imageFiles, imageFile)
+	imageSet = domain.ImageSet{
+		Path:       path,
+		ImageFiles: []domain.ImageFile{},
 	}
 
-	return domain.ImageSet{
-		Path:       path,
-		ImageFiles: imageFiles,
-	}, []error{}, nil
+	for _, f := range files {
+		imageFile, _ := imageFileRepository.LoadImageFile(imageSet, filepath.Base(f.Name())) // TODO: handle error
+		imageSet.ImageFiles = append(imageSet.ImageFiles, imageFile)
+	}
+
+	return imageSet, []error{}, nil
 }

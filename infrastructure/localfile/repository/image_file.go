@@ -25,16 +25,17 @@ func NewImageFileLocalFileRepository(i *do.Injector) (domain.ImageFileRepository
 	return &imageFileLocalFileRepository{}, nil
 }
 
-func (r *imageFileLocalFileRepository) LoadImageFile(path string) (domain.ImageFile, error) {
-	stem, extension := splitFileName(path)
+func (r *imageFileLocalFileRepository) LoadImageFile(imageSet domain.ImageSet, filename string) (domain.ImageFile, error) {
+	stem, extension := splitFileName(filename)
 
 	return domain.ImageFile{
 		// TODO
-		Size:      0,
-		Width:     0,
-		Height:    0,
-		Stem:      stem,
-		Extension: extension,
+		Size:           0,
+		Width:          0,
+		Height:         0,
+		Stem:           stem,
+		Extension:      extension,
+		ParentImageSet: imageSet,
 	}, nil
 }
 
