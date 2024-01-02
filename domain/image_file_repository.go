@@ -1,5 +1,5 @@
 package domain
 
 type ImageFileRepository interface {
-	LoadImageFile(path string) (ImageFile, error)
+	LoadImageFile(imageSet ImageSet, filename string) (ImageFile, error)
 }

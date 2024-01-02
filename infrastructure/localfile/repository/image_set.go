@@ -3,6 +3,7 @@ package repository
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 	"wallshrink/domain"
 
 	"github.com/samber/do"
@@ -19,19 +20,25 @@ func (r *imageSetLocalFileRepository) LoadImageSet(path string) (imageSet domain
 
 	files, err := os.ReadDir(path)
 	if err != nil {
-		return domain.ImageSet{}, nil, fmt.Errorf("%w: %s", domain.ErrDirectoryLoadFailed, err)
+		return domain.ImageSet{}, nil, fmt.Errorf("%w: %s", domain.ErrImageSetLoadFailed, err)
 	}
 
-	var imageFiles []domain.ImageFile
-	for _, f := range files {
-		// TODO: handle error
-		fullPath := path + "/" + f.Name()
-		imageFile, _ := imageFileRepository.LoadImageFile(fullPath)
-		imageFiles = append(imageFiles, imageFile)
-	}
-
-	return domain.ImageSet{
+	imageSet = domain.ImageSet{
 		Path:       path,
-		ImageFiles: imageFiles,
-	}, []error{}, nil
+		ImageFiles: []domain.ImageFile{},
+	}
+
+	for i, f := range files {
+		imageFile, err := imageFileRepository.LoadImageFile(imageSet, filepath.Base(f.Name()))
+
+		if err != nil {
+			fmt.Println("[!] Failed to image information. The directory should contain only image files.")
+			fmt.Println(err)
+		}
+
+		imageSet.ImageFiles = append(imageSet.ImageFiles, imageFile)
+		fmt.Printf("%d/%d: %s\n", i, len(files), imageFile.FullPath())
+	}
+
+	return imageSet, []error{}, nil
 }

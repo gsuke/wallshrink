@@ -5,6 +5,7 @@ go 1.21.4
 require (
 	github.com/samber/do v1.6.0
 	github.com/spf13/cobra v1.8.0
+	gopkg.in/vansante/go-ffprobe.v2 v2.1.1
 )
 
 require (
