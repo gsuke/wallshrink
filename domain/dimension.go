@@ -7,13 +7,13 @@ type Dimension struct {
 	Height int
 }
 
-func (d *Dimension) ScaleDown(dimensionToScaleDown Dimension) Dimension {
-	if d.Width <= dimensionToScaleDown.Width || d.Height <= dimensionToScaleDown.Height {
+func (d *Dimension) ScaleDown(scaleDownDimension Dimension) Dimension {
+	if d.Width <= scaleDownDimension.Width || d.Height <= scaleDownDimension.Height {
 		return *d
 	}
 
-	widthRatio := float64(dimensionToScaleDown.Width) / float64(d.Width)
-	heightRatio := float64(dimensionToScaleDown.Height) / float64(d.Height)
+	widthRatio := float64(scaleDownDimension.Width) / float64(d.Width)
+	heightRatio := float64(scaleDownDimension.Height) / float64(d.Height)
 
 	if widthRatio == heightRatio {
 		return Dimension{
@@ -25,12 +25,12 @@ func (d *Dimension) ScaleDown(dimensionToScaleDown Dimension) Dimension {
 	if widthRatio < heightRatio {
 		return Dimension{
 			Width:  int(math.Round(float64(d.Width) * heightRatio)),
-			Height: dimensionToScaleDown.Height,
+			Height: scaleDownDimension.Height,
 		}
 	}
 
 	return Dimension{
-		Width:  dimensionToScaleDown.Width,
+		Width:  scaleDownDimension.Width,
 		Height: int(math.Round(float64(d.Height) * widthRatio)),
 	}
 }

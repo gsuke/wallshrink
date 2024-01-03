@@ -12,6 +12,11 @@ import (
 type imageFileLocalFileRepository struct{}
 
 func NewImageFileLocalFileRepository(i *do.Injector) (domain.ImageFileRepository, error) {
+	if !isFFmpegAvailable() {
+		fmt.Println(repository.ErrFFmpegIsNotAvailable)
+		os.Exit(1)
+	}
+
 	if !isFFProbeAvailable() {
 		fmt.Println(repository.ErrFFProbeIsNotAvailable)
 		os.Exit(1)
