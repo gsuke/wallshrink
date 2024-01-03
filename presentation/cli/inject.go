@@ -13,5 +13,4 @@ func inject() {
 	})
 
 	do.Provide(nil, repository.NewImageSetLocalFileRepository)
-	do.Provide(nil, repository.NewImageFileLocalFileRepository)
 }
