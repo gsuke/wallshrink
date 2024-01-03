@@ -1,4 +1,4 @@
-package image_set_local_file_repository
+package image_file_local_file_repository
 
 import (
 	"path/filepath"

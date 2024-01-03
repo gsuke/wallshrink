@@ -5,9 +5,12 @@ import (
 	"os"
 	"path/filepath"
 	"wallshrink/domain"
+
+	"github.com/samber/do"
 )
 
 func (r *imageSetLocalFileRepository) LoadImageSet(path string) (imageSet domain.ImageSet, warnings []error, err error) {
+	imageFileRepository := do.MustInvoke[domain.ImageFileRepository](nil)
 
 	files, err := os.ReadDir(path)
 	if err != nil {
@@ -21,9 +24,10 @@ func (r *imageSetLocalFileRepository) LoadImageSet(path string) (imageSet domain
 
 	// Load all ImageFiles in ImageSet
 	for i, f := range files {
-		NewImageSet, err := r.LoadImageFile(imageSet, f.Name())
+		imageFilePath := filepath.Join(path, f.Name())
+		fmt.Printf("%d/%d: %s\n", i+1, len(files), imageFilePath)
 
-		fmt.Printf("%d/%d: %s\n", i+1, len(files), filepath.Join(path, f.Name()))
+		imageFile, err := imageFileRepository.LoadImageFile(imageFilePath)
 
 		if err != nil {
 			warnings = append(warnings, err)
@@ -31,8 +35,7 @@ func (r *imageSetLocalFileRepository) LoadImageSet(path string) (imageSet domain
 			continue
 		}
 
-		imageSet = NewImageSet
-
+		imageSet.BaseNameToImageFileMap[imageFilePath] = imageFile
 	}
 
 	return imageSet, warnings, nil
