@@ -1,6 +1,6 @@
 package domain
 
 type ImageSet struct {
-	Path       string
-	ImageFiles []ImageFile
+	Path                   string
+	BaseNameToImageFileMap map[string]ImageFile // [Basename of the file] -> [ImageFile]
 }
