@@ -22,6 +22,6 @@ func CompressImageSetUseCase(sourcePath string, destinationPath string, width in
 		return err
 	}
 
-	fmt.Println(sourceImageSet, destinationImageSet)
+	fmt.Println(len(sourceImageSet.BaseNameToImageFileMap), len(destinationImageSet.BaseNameToImageFileMap))
 	return nil
 }

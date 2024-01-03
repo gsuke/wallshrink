@@ -24,8 +24,8 @@ func (r *imageSetLocalFileRepository) LoadImageSet(path string) (imageSet domain
 	}
 
 	imageSet = domain.ImageSet{
-		Path:       path,
-		ImageFiles: []domain.ImageFile{},
+		Path:                   path,
+		BaseNameToImageFileMap: map[string]domain.ImageFile{},
 	}
 
 	for i, f := range files {
@@ -35,9 +35,10 @@ func (r *imageSetLocalFileRepository) LoadImageSet(path string) (imageSet domain
 			warnings = append(warnings, err)
 			fmt.Println("[!] Failed to image information. The directory should contain only image files.")
 			fmt.Println(err)
+			continue
 		}
 
-		imageSet.ImageFiles = append(imageSet.ImageFiles, imageFile)
+		imageSet.BaseNameToImageFileMap[imageFile.BaseName()] = imageFile
 		fmt.Printf("%d/%d: %s\n", i, len(files), imageFile.FullPath())
 	}
 

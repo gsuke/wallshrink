@@ -12,5 +12,9 @@ type ImageFile struct {
 }
 
 func (f *ImageFile) FullPath() string {
-	return filepath.Join(f.ParentImageSet.Path, f.Stem+f.Extension)
+	return filepath.Join(f.ParentImageSet.Path, f.BaseName())
+}
+
+func (f *ImageFile) BaseName() string {
+	return f.Stem + f.Extension
 }
