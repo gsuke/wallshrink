@@ -1,7 +1,8 @@
 package cli
 
 import (
-	"wallshrink/infrastructure/localfile/repository/image_set_local_file_repository"
+	"wallshrink/infrastructure/localfile/repository/local_file_repository/image_file_local_file_repository"
+	"wallshrink/infrastructure/localfile/repository/local_file_repository/image_set_local_file_repository"
 
 	"github.com/samber/do"
 )
@@ -13,4 +14,5 @@ func inject() {
 	})
 
 	do.Provide(nil, image_set_local_file_repository.NewImageSetLocalFileRepository)
+	do.Provide(nil, image_file_local_file_repository.NewImageFileLocalFileRepository)
 }
