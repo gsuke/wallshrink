@@ -29,9 +29,8 @@ func CompressImageSetUseCase(sourcePath string, destinationPath string, scaleDow
 	fmt.Println(len(sourceImageSet.BaseNameToImageFileMap), len(destinationImageSet.BaseNameToImageFileMap))
 
 	for _, imageFile := range sourceImageSet.BaseNameToImageFileMap {
-		_, tempCompressedImageFile, _ := tempImageSet.CreateTempCompressedImageFile(imageFile, scaleDownDimension)
-		fmt.Println(tempCompressedImageFile)
-		break
+		compressedImageFile, _ := imageFile.CompressTemp(tempImageSet, scaleDownDimension)
+		fmt.Println(compressedImageFile)
 	}
 
 	return nil
