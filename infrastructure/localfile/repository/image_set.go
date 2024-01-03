@@ -32,6 +32,7 @@ func (r *imageSetLocalFileRepository) LoadImageSet(path string) (imageSet domain
 		imageFile, err := imageFileRepository.LoadImageFile(imageSet, filepath.Base(f.Name()))
 
 		if err != nil {
+			warnings = append(warnings, err)
 			fmt.Println("[!] Failed to image information. The directory should contain only image files.")
 			fmt.Println(err)
 		}
@@ -40,5 +41,5 @@ func (r *imageSetLocalFileRepository) LoadImageSet(path string) (imageSet domain
 		fmt.Printf("%d/%d: %s\n", i, len(files), imageFile.FullPath())
 	}
 
-	return imageSet, []error{}, nil
+	return imageSet, warnings, nil
 }
