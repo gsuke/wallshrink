@@ -15,8 +15,13 @@ func run(cmd *cobra.Command, args []string) {
 	width, _ := cmd.Flags().GetInt("width")
 	height, _ := cmd.Flags().GetInt("height")
 
+	dimension := domain.Dimension{
+		Width:  width,
+		Height: height,
+	}
+
 	inject()
-	err := usecase.CompressImageSetUseCase(input, output, width, height)
+	err := usecase.CompressImageSetUseCase(input, output, dimension)
 
 	// Main error handle
 	if err != nil {

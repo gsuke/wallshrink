@@ -7,7 +7,7 @@ import (
 	"github.com/samber/do"
 )
 
-func CompressImageSetUseCase(sourcePath string, destinationPath string, width int, height int) error {
+func CompressImageSetUseCase(sourcePath string, destinationPath string, dimensionToScaleDown domain.Dimension) error {
 	imageSetRepository := do.MustInvoke[domain.ImageSetRepository](nil)
 
 	// Source ImageSet

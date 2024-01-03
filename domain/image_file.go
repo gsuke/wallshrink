@@ -4,8 +4,7 @@ import "path/filepath"
 
 type ImageFile struct {
 	Size           int
-	Width          int
-	Height         int
+	Dimension      Dimension
 	Stem           string
 	Extension      string // includes "."
 	ParentImageSet ImageSet

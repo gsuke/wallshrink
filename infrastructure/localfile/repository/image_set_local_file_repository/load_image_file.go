@@ -19,12 +19,11 @@ func (r *imageSetLocalFileRepository) LoadImageFile(imageSet domain.ImageSet, fi
 	imageFile.Size = size
 
 	// Get image dimension
-	width, height, err := getImageDimension(imageFile.FullPath())
+	dimension, err := getImageDimension(imageFile.FullPath())
 	if err != nil {
 		return domain.ImageSet{}, err
 	}
-	imageFile.Width = width
-	imageFile.Height = height
+	imageFile.Dimension = dimension
 
 	imageSet.BaseNameToImageFileMap[imageFile.BaseName()] = imageFile
 
