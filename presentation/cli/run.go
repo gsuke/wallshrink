@@ -11,12 +11,12 @@ import (
 
 func run(cmd *cobra.Command, args []string) {
 	input, _ := cmd.Flags().GetString("input")
-	// output, _ := cmd.Flags().GetString("output")
-	// width, _ := cmd.Flags().GetInt("width")
-	// height, _ := cmd.Flags().GetInt("height")
+	output, _ := cmd.Flags().GetString("output")
+	width, _ := cmd.Flags().GetInt("width")
+	height, _ := cmd.Flags().GetInt("height")
 
 	inject()
-	err := usecase.TestUseCase(input)
+	err := usecase.CompressImageSetUseCase(input, output, width, height)
 
 	// Main error handle
 	if err != nil {
