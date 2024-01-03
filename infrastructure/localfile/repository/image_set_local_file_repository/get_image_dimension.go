@@ -9,14 +9,19 @@ import (
 	"gopkg.in/vansante/go-ffprobe.v2"
 )
 
-func getImageDimension(path string) (width int, height int, err error) {
+func getImageDimension(path string) (domain.Dimension, error) {
 	ctx, cancelFn := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancelFn()
 
 	data, err := ffprobe.ProbeURL(ctx, path)
 	if err != nil {
-		return 0, 0, fmt.Errorf("%w: %s", domain.ErrImageInfoLoadFailed, err)
+		return domain.Dimension{}, fmt.Errorf("%w: %s", domain.ErrImageInfoLoadFailed, err)
 	}
 
-	return data.Streams[0].Width, data.Streams[0].Height, nil
+	dimension := domain.Dimension{
+		Width:  data.Streams[0].Width,
+		Height: data.Streams[0].Height,
+	}
+
+	return dimension, nil
 }
