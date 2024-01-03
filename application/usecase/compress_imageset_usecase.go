@@ -7,8 +7,10 @@ import (
 	"github.com/samber/do"
 )
 
-func CompressImageSetUseCase(sourcePath string, destinationPath string, dimensionToScaleDown domain.Dimension) error {
+func CompressImageSetUseCase(sourcePath string, destinationPath string, scaleDownDimension domain.Dimension) error {
 	imageSetRepository := do.MustInvoke[domain.ImageSetRepository](nil)
+
+	tempImageSet := imageSetRepository.PrepareTempImageSet()
 
 	// Source ImageSet
 	fmt.Printf("Load Directory: %s\n", sourcePath)
@@ -25,5 +27,12 @@ func CompressImageSetUseCase(sourcePath string, destinationPath string, dimensio
 	}
 
 	fmt.Println(len(sourceImageSet.BaseNameToImageFileMap), len(destinationImageSet.BaseNameToImageFileMap))
+
+	for _, imageFile := range sourceImageSet.BaseNameToImageFileMap {
+		_, tempCompressedImageFile, _ := tempImageSet.CreateTempCompressedImageFile(imageFile, scaleDownDimension)
+		fmt.Println(tempCompressedImageFile)
+		break
+	}
+
 	return nil
 }
