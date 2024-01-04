@@ -1,0 +1,7 @@
+version: '3'
+
+tasks:
+  generate:
+    cmds:
+      - deep-copy --type ImageSet -o ./domain/image_set_deepcopy.go ./domain
+    silent: true

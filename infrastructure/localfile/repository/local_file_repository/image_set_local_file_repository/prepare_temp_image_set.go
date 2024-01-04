@@ -8,6 +8,6 @@ import (
 func (r *imageSetLocalFileRepository) PrepareTempImageSet() domain.ImageSet {
 	return domain.ImageSet{
 		Path:                   os.TempDir(),
-		BaseNameToImageFileMap: map[string]domain.ImageFile{},
+		BaseNameToImageFileMap: map[domain.BaseName]domain.ImageFile{},
 	}
 }

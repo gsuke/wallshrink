@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"errors"
 	"fmt"
 	"wallshrink/domain"
 
@@ -12,6 +13,7 @@ func CompressImageSetUseCase(sourcePath string, destinationPath string, scaleDow
 	imageFileRepository := do.MustInvoke[domain.ImageFileRepository](nil)
 
 	tempImageSet := imageSetRepository.PrepareTempImageSet()
+	defer imageSetRepository.RemoveTempImageSet(tempImageSet)
 
 	// Source ImageSet
 	fmt.Printf("Load Directory: %s\n", sourcePath)
@@ -27,20 +29,50 @@ func CompressImageSetUseCase(sourcePath string, destinationPath string, scaleDow
 		return err
 	}
 
-	// TODO: delete later
-	fmt.Println(len(sourceImageSet.BaseNameToImageFileMap), len(destinationImageSet.BaseNameToImageFileMap))
-
 	// Compress all image files
 	for _, imageFile := range sourceImageSet.BaseNameToImageFileMap {
-		compressedImageFile, _ := imageFile.CompressTemp(tempImageSet, scaleDownDimension, 65)
-		tempImageSet.BaseNameToImageFileMap[compressedImageFile.BaseName()] = compressedImageFile
 
-		ssim, _ := imageFileRepository.SSIM(imageFile, compressedImageFile)
-		fmt.Printf("SSIM: %f\n", ssim)
+		// Attempted compression: quality 50 -> 100
+		for quality := 50; quality <= 100; quality += 10 {
+			if quality > 100 {
+				// TODO: define error
+				return errors.New("failed to set quality")
+			}
+
+			fmt.Printf("Attempting compression (quality=%d): %s\n", quality, imageFile.BaseName.String())
+
+			// Compress temporarily
+			compressedImageFile, err := imageFile.CompressTemp(tempImageSet, scaleDownDimension, quality)
+			if err != nil {
+				return err
+			}
+			tempImageSet.BaseNameToImageFileMap[compressedImageFile.BaseName] = compressedImageFile
+
+			// Calculate SSIM
+			ssim, _ := imageFileRepository.SSIM(imageFile, compressedImageFile)
+			fmt.Printf("SSIM: %f\n", ssim)
+
+			if ssim > 0.98 {
+				fmt.Println("SSIM OK!")
+
+				// Copy compressed image file to destination directory
+				destinationImageSet, _, err = imageSetRepository.CopyImageFile(
+					compressedImageFile,
+					destinationImageSet,
+					imageFile.BaseName,
+				)
+				if err != nil {
+					return err
+				}
+
+				break
+			}
+		}
+
 	}
 
-	// Remove temporary image set
-	imageSetRepository.RemoveTempImageSet(tempImageSet)
+	// TODO: delete later
+	fmt.Println(len(sourceImageSet.BaseNameToImageFileMap), len(destinationImageSet.BaseNameToImageFileMap))
 
 	return nil
 }

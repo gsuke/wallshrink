@@ -16,7 +16,8 @@ func (r *imageSetLocalFileRepository) RemoveTempImageSet(tempImageSet domain.Ima
 	imageFileRepository := do.MustInvoke[domain.ImageFileRepository](nil)
 
 	for _, f := range tempImageSet.BaseNameToImageFileMap {
-		err := imageFileRepository.RemoveImageFile(f.FullPath())
+		err := imageFileRepository.RemoveImageFile(f)
+		// TODO: Handle error in detail
 		if err != nil {
 			fmt.Printf("[!] %s\n", err)
 		}
