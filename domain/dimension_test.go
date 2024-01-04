@@ -1,12 +1,11 @@
-package domain_test
+package domain
 
 import (
 	"testing"
-	"wallshrink/domain"
 )
 
 func TestScaleDown(t *testing.T) {
-	dimensionToScaleDown := domain.Dimension{
+	dimensionToScaleDown := Dimension{
 		Width:  600,
 		Height: 400,
 	}
@@ -29,11 +28,11 @@ func TestScaleDown(t *testing.T) {
 	}
 
 	for i, test := range tests {
-		srcDimension := domain.Dimension{
+		srcDimension := Dimension{
 			Width:  test.srcWidth,
 			Height: test.srcHeight,
 		}
-		wantDimension := domain.Dimension{
+		wantDimension := Dimension{
 			Width:  test.wantWidth,
 			Height: test.wantHeight,
 		}
@@ -41,16 +40,16 @@ func TestScaleDown(t *testing.T) {
 		gotDimension := srcDimension.ScaleDown(dimensionToScaleDown)
 		if gotDimension != wantDimension {
 			t.Errorf(
-				"No.%d: ScaleDown (%d, %d) -> (%d, %d): Expected (%d, %d), got (%d, %d)\n",
+				"No.%d: ScaleDown (%d, %d) -> (%d, %d): got (%d, %d), want (%d, %d)\n",
 				i+1,
 				srcDimension.Width,
 				srcDimension.Height,
 				dimensionToScaleDown.Width,
 				dimensionToScaleDown.Height,
-				wantDimension.Width,
-				wantDimension.Height,
 				gotDimension.Width,
 				gotDimension.Height,
+				wantDimension.Width,
+				wantDimension.Height,
 			)
 		}
 	}
