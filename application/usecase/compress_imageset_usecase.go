@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"errors"
 	"fmt"
 	"wallshrink/domain"
 
@@ -35,7 +36,12 @@ func CompressImageSetUseCase(sourcePath string, destinationPath string, scaleDow
 	for _, imageFile := range sourceImageSet.BaseNameToImageFileMap {
 
 		// Attempted compression: quality 50 -> 100
-		for quality := 50; quality <= 100; quality += 5 {
+		for quality := 50; quality <= 100; quality += 10 {
+			if quality > 100 {
+				// TODO: define error
+				return errors.New("failed to set quality")
+			}
+
 			fmt.Printf("Attempted compression (quality=%d): %s\n", quality, imageFile.BaseName())
 
 			// Compress temporarily

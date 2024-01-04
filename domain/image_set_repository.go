@@ -6,5 +6,5 @@ type ImageSetRepository interface {
 
 	// RemoveTempImageSet removes temporary ImageSet.
 	// The arg "tempImageSet" must be a temporary ImageSet.
-	RemoveTempImageSet(tempImageSet ImageSet) error
+	RemoveTempImageSet(ImageSet) error
 }
