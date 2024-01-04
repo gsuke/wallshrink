@@ -12,6 +12,7 @@ func CompressImageSetUseCase(sourcePath string, destinationPath string, scaleDow
 	imageFileRepository := do.MustInvoke[domain.ImageFileRepository](nil)
 
 	tempImageSet := imageSetRepository.PrepareTempImageSet()
+	defer imageSetRepository.RemoveTempImageSet(tempImageSet)
 
 	// Source ImageSet
 	fmt.Printf("Load Directory: %s\n", sourcePath)
@@ -32,15 +33,26 @@ func CompressImageSetUseCase(sourcePath string, destinationPath string, scaleDow
 
 	// Compress all image files
 	for _, imageFile := range sourceImageSet.BaseNameToImageFileMap {
-		compressedImageFile, _ := imageFile.CompressTemp(tempImageSet, scaleDownDimension, 65)
-		tempImageSet.BaseNameToImageFileMap[compressedImageFile.BaseName()] = compressedImageFile
 
-		ssim, _ := imageFileRepository.SSIM(imageFile, compressedImageFile)
-		fmt.Printf("SSIM: %f\n", ssim)
+		// Attempted compression: quality 50 -> 100
+		for quality := 50; quality <= 100; quality += 5 {
+			fmt.Printf("Attempted compression (quality=%d): %s\n", quality, imageFile.BaseName())
+
+			// Compress temporarily
+			compressedImageFile, _ := imageFile.CompressTemp(tempImageSet, scaleDownDimension, quality)
+			tempImageSet.BaseNameToImageFileMap[compressedImageFile.BaseName()] = compressedImageFile
+
+			// Calculate SSIM
+			ssim, _ := imageFileRepository.SSIM(imageFile, compressedImageFile)
+			fmt.Printf("SSIM: %f\n", ssim)
+
+			if ssim > 0.98 {
+				fmt.Println("SSIM OK!")
+				break
+			}
+		}
+
 	}
-
-	// Remove temporary image set
-	imageSetRepository.RemoveTempImageSet(tempImageSet)
 
 	return nil
 }
