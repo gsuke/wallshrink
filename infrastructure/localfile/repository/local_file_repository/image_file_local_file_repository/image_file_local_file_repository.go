@@ -7,6 +7,7 @@ import (
 	repository "wallshrink/infrastructure/localfile/repository/local_file_repository"
 
 	"github.com/samber/do"
+	ffmpeg "github.com/u2takey/ffmpeg-go"
 )
 
 type imageFileLocalFileRepository struct{}
@@ -21,6 +22,8 @@ func NewImageFileLocalFileRepository(i *do.Injector) (domain.ImageFileRepository
 		fmt.Println(repository.ErrFFProbeIsNotAvailable)
 		os.Exit(1)
 	}
+
+	ffmpeg.LogCompiledCommand = false
 
 	return &imageFileLocalFileRepository{}, nil
 }

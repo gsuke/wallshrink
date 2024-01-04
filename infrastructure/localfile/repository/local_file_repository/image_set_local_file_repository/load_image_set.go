@@ -26,7 +26,7 @@ func (r *imageSetLocalFileRepository) LoadImageSet(dirPath string) (imageSet dom
 	for i, f := range dirFiles {
 		baseName := domain.NewBaseName(f.Name())
 		imageFilePath := filepath.Join(dirPath, baseName.String())
-		fmt.Printf("%d/%d: %s\n", i+1, len(dirFiles), imageFilePath)
+		fmt.Printf("[%d/%d] %s\n", i+1, len(dirFiles), imageFilePath)
 
 		imageFileParentless, err := imageFileRepository.LoadImageFile(imageFilePath)
 		if err != nil {
