@@ -33,10 +33,14 @@ func CompressImageSetUseCase(sourcePath string, destinationPath string, scaleDow
 	// Compress all image files
 	for _, imageFile := range sourceImageSet.BaseNameToImageFileMap {
 		compressedImageFile, _ := imageFile.CompressTemp(tempImageSet, scaleDownDimension, 65)
+		tempImageSet.BaseNameToImageFileMap[compressedImageFile.BaseName()] = compressedImageFile
 
 		ssim, _ := imageFileRepository.SSIM(imageFile, compressedImageFile)
 		fmt.Printf("SSIM: %f\n", ssim)
 	}
+
+	// Remove temporary image set
+	imageSetRepository.RemoveTempImageSet(tempImageSet)
 
 	return nil
 }
