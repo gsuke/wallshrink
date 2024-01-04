@@ -9,6 +9,7 @@ import (
 
 func CompressImageSetUseCase(sourcePath string, destinationPath string, scaleDownDimension domain.Dimension) error {
 	imageSetRepository := do.MustInvoke[domain.ImageSetRepository](nil)
+	imageFileRepository := do.MustInvoke[domain.ImageFileRepository](nil)
 
 	tempImageSet := imageSetRepository.PrepareTempImageSet()
 
@@ -26,11 +27,15 @@ func CompressImageSetUseCase(sourcePath string, destinationPath string, scaleDow
 		return err
 	}
 
+	// TODO: delete later
 	fmt.Println(len(sourceImageSet.BaseNameToImageFileMap), len(destinationImageSet.BaseNameToImageFileMap))
 
+	// Compress all image files
 	for _, imageFile := range sourceImageSet.BaseNameToImageFileMap {
 		compressedImageFile, _ := imageFile.CompressTemp(tempImageSet, scaleDownDimension)
-		fmt.Println(compressedImageFile)
+
+		ssim, _ := imageFileRepository.SSIM(imageFile, compressedImageFile)
+		fmt.Printf("SSIM: %f\n", ssim)
 	}
 
 	return nil

@@ -6,4 +6,5 @@ var (
 	ErrImageSetLoadFailed  = errors.New("failed to load image set")
 	ErrFileInfoLoadFailed  = errors.New("failed to load file information")
 	ErrImageInfoLoadFailed = errors.New("failed to load image information")
+	ErrSSIMCalculateFailed = errors.New("failed to calculate SSIM")
 )
