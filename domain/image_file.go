@@ -16,7 +16,7 @@ type ImageFileParentless struct {
 
 type ImageFile struct {
 	ImageFileParentless
-	ParentImageSet ImageSet
+	ImageSetPath string
 }
 
 func (f *ImageFileParentless) BaseName() string {
@@ -24,7 +24,7 @@ func (f *ImageFileParentless) BaseName() string {
 }
 
 func (f *ImageFile) FullPath() string {
-	return filepath.Join(f.ParentImageSet.Path, f.Stem+f.Extension)
+	return filepath.Join(f.ImageSetPath, f.Stem+f.Extension)
 }
 
 func (f *ImageFile) CompressTemp(tempImageSet ImageSet, scaleDownDimension Dimension, quality int) (ImageFile, error) {
@@ -34,7 +34,7 @@ func (f *ImageFile) CompressTemp(tempImageSet ImageSet, scaleDownDimension Dimen
 	compressedImageFile.Dimension = f.Dimension.ScaleDown(scaleDownDimension)
 	compressedImageFile.Stem = uuid.NewString()
 	compressedImageFile.Extension = ".webp"
-	compressedImageFile.ParentImageSet = tempImageSet
+	compressedImageFile.ImageSetPath = tempImageSet.Path
 
 	compressedImageFile, err := imageFileRepository.Compress(*f, compressedImageFile, quality)
 	if err != nil {

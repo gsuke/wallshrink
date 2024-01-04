@@ -36,7 +36,7 @@ func (r *imageSetLocalFileRepository) LoadImageSet(path string) (imageSet domain
 
 		imageFile := domain.ImageFile{
 			ImageFileParentless: imageFileParentless,
-			ParentImageSet:      imageSet,
+			ImageSetPath:        imageSet.Path,
 		}
 
 		imageSet.BaseNameToImageFileMap[imageFilePath] = imageFile

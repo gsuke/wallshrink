@@ -42,7 +42,7 @@ func CompressImageSetUseCase(sourcePath string, destinationPath string, scaleDow
 				return errors.New("failed to set quality")
 			}
 
-			fmt.Printf("Attempted compression (quality=%d): %s\n", quality, imageFile.BaseName())
+			fmt.Printf("Attempting compression (quality=%d): %s\n", quality, imageFile.BaseName())
 
 			// Compress temporarily
 			compressedImageFile, _ := imageFile.CompressTemp(tempImageSet, scaleDownDimension, quality)
