@@ -23,7 +23,7 @@ func (f *ImageFile) FullPath() string {
 	return filepath.Join(f.ParentImageSet.Path, f.Stem+f.Extension)
 }
 
-func (f *ImageFile) CompressTemp(tempImageSet ImageSet, scaleDownDimension Dimension) (ImageFile, error) {
+func (f *ImageFile) CompressTemp(tempImageSet ImageSet, scaleDownDimension Dimension, quality int) (ImageFile, error) {
 	imageFileRepository := do.MustInvoke[ImageFileRepository](nil)
 
 	compressedImageFile := ImageFile{
@@ -33,7 +33,7 @@ func (f *ImageFile) CompressTemp(tempImageSet ImageSet, scaleDownDimension Dimen
 		ParentImageSet: tempImageSet,
 	}
 
-	compressedImageFile, err := imageFileRepository.Compress(*f, compressedImageFile)
+	compressedImageFile, err := imageFileRepository.Compress(*f, compressedImageFile, quality)
 	if err != nil {
 		return ImageFile{}, err
 	}

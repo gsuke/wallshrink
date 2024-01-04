@@ -10,6 +10,7 @@ import (
 func (r *imageFileLocalFileRepository) Compress(
 	srcImageFile domain.ImageFile,
 	destImageFile domain.ImageFile,
+	quality int,
 ) (domain.ImageFile, error) {
 
 	// Compress
@@ -19,7 +20,7 @@ func (r *imageFileLocalFileRepository) Compress(
 			destImageFile.FullPath(),
 			ffmpeg.KwArgs{
 				"s":       fmt.Sprintf("%dx%d", destImageFile.Dimension.Width, destImageFile.Dimension.Height),
-				"quality": 65,
+				"quality": quality,
 			},
 		).
 		Run()
