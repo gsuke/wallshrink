@@ -29,9 +29,6 @@ func CompressImageSetUseCase(sourcePath string, destinationPath string, scaleDow
 		return err
 	}
 
-	// TODO: delete later
-	fmt.Println(len(sourceImageSet.BaseNameToImageFileMap), len(destinationImageSet.BaseNameToImageFileMap))
-
 	// Compress all image files
 	for _, imageFile := range sourceImageSet.BaseNameToImageFileMap {
 
@@ -57,11 +54,25 @@ func CompressImageSetUseCase(sourcePath string, destinationPath string, scaleDow
 
 			if ssim > 0.98 {
 				fmt.Println("SSIM OK!")
+
+				// Copy compressed image file to destination directory
+				destinationImageSet, _, err = imageSetRepository.CopyImageFile(
+					compressedImageFile,
+					destinationImageSet,
+					imageFile.BaseName,
+				)
+				if err != nil {
+					return err
+				}
+
 				break
 			}
 		}
 
 	}
+
+	// TODO: delete later
+	fmt.Println(len(sourceImageSet.BaseNameToImageFileMap), len(destinationImageSet.BaseNameToImageFileMap))
 
 	return nil
 }
