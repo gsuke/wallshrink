@@ -42,11 +42,14 @@ func CompressImageSetUseCase(sourcePath string, destinationPath string, scaleDow
 				return errors.New("failed to set quality")
 			}
 
-			fmt.Printf("Attempting compression (quality=%d): %s\n", quality, imageFile.BaseName())
+			fmt.Printf("Attempting compression (quality=%d): %s\n", quality, imageFile.BaseName.String())
 
 			// Compress temporarily
-			compressedImageFile, _ := imageFile.CompressTemp(tempImageSet, scaleDownDimension, quality)
-			tempImageSet.BaseNameToImageFileMap[compressedImageFile.BaseName()] = compressedImageFile
+			compressedImageFile, err := imageFile.CompressTemp(tempImageSet, scaleDownDimension, quality)
+			if err != nil {
+				return err
+			}
+			tempImageSet.BaseNameToImageFileMap[compressedImageFile.BaseName] = compressedImageFile
 
 			// Calculate SSIM
 			ssim, _ := imageFileRepository.SSIM(imageFile, compressedImageFile)

@@ -9,23 +9,24 @@ import (
 	"github.com/samber/do"
 )
 
-func (r *imageSetLocalFileRepository) LoadImageSet(path string) (imageSet domain.ImageSet, warnings []error, err error) {
+func (r *imageSetLocalFileRepository) LoadImageSet(dirPath string) (imageSet domain.ImageSet, warnings []error, err error) {
 	imageFileRepository := do.MustInvoke[domain.ImageFileRepository](nil)
 
-	files, err := os.ReadDir(path)
+	dirFiles, err := os.ReadDir(dirPath)
 	if err != nil {
 		return domain.ImageSet{}, nil, fmt.Errorf("%w: %s", domain.ErrImageSetLoadFailed, err)
 	}
 
 	imageSet = domain.ImageSet{
-		Path:                   path,
-		BaseNameToImageFileMap: map[string]domain.ImageFile{},
+		Path:                   dirPath,
+		BaseNameToImageFileMap: map[domain.BaseName]domain.ImageFile{},
 	}
 
 	// Load all ImageFiles in ImageSet
-	for i, f := range files {
-		imageFilePath := filepath.Join(path, f.Name())
-		fmt.Printf("%d/%d: %s\n", i+1, len(files), imageFilePath)
+	for i, f := range dirFiles {
+		baseName := domain.NewBaseName(f.Name())
+		imageFilePath := filepath.Join(dirPath, baseName.String())
+		fmt.Printf("%d/%d: %s\n", i+1, len(dirFiles), imageFilePath)
 
 		imageFileParentless, err := imageFileRepository.LoadImageFile(imageFilePath)
 		if err != nil {
@@ -39,7 +40,7 @@ func (r *imageSetLocalFileRepository) LoadImageSet(path string) (imageSet domain
 			ImageSetPath:        imageSet.Path,
 		}
 
-		imageSet.BaseNameToImageFileMap[imageFilePath] = imageFile
+		imageSet.BaseNameToImageFileMap[imageFile.BaseName] = imageFile
 	}
 
 	return imageSet, warnings, nil

@@ -3,12 +3,8 @@ package image_file_local_file_repository
 import "wallshrink/domain"
 
 func (r *imageFileLocalFileRepository) LoadImageFile(filePath string) (domain.ImageFileParentless, error) {
-	stem, extension := splitFileName(filePath)
-
-	imageFile := domain.ImageFileParentless{
-		Stem:      stem,
-		Extension: extension,
-	}
+	imageFile := domain.ImageFileParentless{}
+	imageFile.BaseName = domain.NewBaseName(filePath)
 
 	// Get file size
 	size, err := getFileSize(filePath)

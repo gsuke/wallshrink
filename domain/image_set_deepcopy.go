@@ -6,7 +6,7 @@ package domain
 func (o ImageSet) DeepCopy() ImageSet {
 	var cp ImageSet = o
 	if o.BaseNameToImageFileMap != nil {
-		cp.BaseNameToImageFileMap = make(map[string]ImageFile, len(o.BaseNameToImageFileMap))
+		cp.BaseNameToImageFileMap = make(map[BaseName]ImageFile, len(o.BaseNameToImageFileMap))
 		for k2, v2 := range o.BaseNameToImageFileMap {
 			cp.BaseNameToImageFileMap[k2] = v2
 		}
