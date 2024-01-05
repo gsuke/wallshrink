@@ -2,9 +2,11 @@ package usecase
 
 import (
 	"fmt"
+	"math"
 	"path/filepath"
 	"wallshrink/domain"
 
+	humanize "github.com/dustin/go-humanize"
 	"github.com/samber/do"
 )
 
@@ -80,7 +82,12 @@ func CompressImageSetUseCase(sourcePath string, destinationPath string, scaleDow
 			fmt.Printf(" SSIM: %f\n", ssim)
 
 			if ssim > 0.98 {
-				fmt.Println(" SSIM OK!")
+				fmt.Printf(
+					" SSIM OK! %s[100%%] -> %s[%d%%]\n",
+					humanize.IBytes(uint64(imageFile.Size)),
+					humanize.IBytes(uint64(compressedImageFile.Size)),
+					int(math.Round(float64(compressedImageFile.Size)/float64(imageFile.Size)*100.0)),
+				)
 
 				// Compare 2 images
 				isFilesSame, err := imageFileRepository.IsFilesSame(

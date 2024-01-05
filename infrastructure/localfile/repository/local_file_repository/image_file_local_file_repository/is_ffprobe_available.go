@@ -13,8 +13,6 @@ import (
 func isFFProbeAvailable() bool {
 	// ffprobe.SetFFProbeBinPath("foo") // For Testing
 
-	// TODO: try replacing go-ffprobe with ffmpeg-go
-
 	ctx, cancelFn := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancelFn()
 
