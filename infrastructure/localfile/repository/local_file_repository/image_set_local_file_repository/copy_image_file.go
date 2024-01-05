@@ -28,7 +28,7 @@ func (r *imageSetLocalFileRepository) CopyImageFile(
 
 	// Update ImageFile
 	imageFileUpdated = srcImageFile
-	imageFileUpdated.ImageSetPath = destImageSet.Path
+	imageFileUpdated.ParentImageSetPath = destImageSet.Path
 	imageFileUpdated.BaseName = destImageFileBaseName
 
 	// Update destImageSet

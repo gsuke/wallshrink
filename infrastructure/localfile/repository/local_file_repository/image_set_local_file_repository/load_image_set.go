@@ -28,16 +28,11 @@ func (r *imageSetLocalFileRepository) LoadImageSet(dirPath string) (imageSet dom
 		imageFilePath := filepath.Join(dirPath, baseName.String())
 		fmt.Printf("[%d/%d] %s\n", i+1, len(dirFiles), imageFilePath)
 
-		imageFileParentless, err := imageFileRepository.LoadImageFile(imageFilePath)
+		imageFile, err := imageFileRepository.LoadImageFile(imageFilePath)
 		if err != nil {
 			warnings = append(warnings, err)
 			fmt.Println("  ↑ [!] Failed to load image information. The directory should contain only image files.")
 			continue
-		}
-
-		imageFile := domain.ImageFile{
-			ImageFileParentless: imageFileParentless,
-			ImageSetPath:        imageSet.Path,
 		}
 
 		imageSet.BaseNameToImageFileMap[imageFile.BaseName] = imageFile

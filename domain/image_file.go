@@ -7,29 +7,28 @@ import (
 	"github.com/samber/do"
 )
 
-type ImageFileParentless struct {
-	Size      int
-	Dimension Dimension
-	BaseName  BaseName
-}
-
 type ImageFile struct {
-	ImageFileParentless
-	ImageSetPath string
+	Size               int
+	Dimension          Dimension
+	BaseName           BaseName
+	ParentImageSetPath string
 }
 
 func (f *ImageFile) FullPath() string {
-	return filepath.Join(f.ImageSetPath, f.BaseName.String())
+	return filepath.Join(f.ParentImageSetPath, f.BaseName.String())
 }
 
 func (f *ImageFile) CompressTemp(tempImageSet ImageSet, scaleDownDimension Dimension, quality int) (ImageFile, error) {
 	imageFileRepository := do.MustInvoke[ImageFileRepository](nil)
 
-	compressedImageFile := ImageFile{}
-	compressedImageFile.Dimension = f.Dimension.ScaleDown(scaleDownDimension)
-	compressedImageFile.BaseName.Stem = uuid.NewString()
-	compressedImageFile.BaseName.Extension = ".webp"
-	compressedImageFile.ImageSetPath = tempImageSet.Path
+	compressedImageFile := ImageFile{
+		Dimension: f.Dimension.ScaleDown(scaleDownDimension),
+		BaseName: BaseName{
+			Stem:      uuid.NewString(),
+			Extension: ".webp",
+		},
+		ParentImageSetPath: tempImageSet.Path,
+	}
 
 	compressedImageFile, err := imageFileRepository.Compress(*f, compressedImageFile, quality)
 	if err != nil {

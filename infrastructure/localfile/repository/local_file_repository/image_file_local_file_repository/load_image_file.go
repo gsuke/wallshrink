@@ -1,22 +1,27 @@
 package image_file_local_file_repository
 
-import "wallshrink/domain"
+import (
+	"path/filepath"
+	"wallshrink/domain"
+)
 
-func (r *imageFileLocalFileRepository) LoadImageFile(filePath string) (domain.ImageFileParentless, error) {
-	imageFile := domain.ImageFileParentless{}
-	imageFile.BaseName = domain.NewBaseName(filePath)
+func (r *imageFileLocalFileRepository) LoadImageFile(filePath string) (domain.ImageFile, error) {
+	imageFile := domain.ImageFile{
+		BaseName:           domain.NewBaseName(filePath),
+		ParentImageSetPath: filepath.Dir(filePath),
+	}
 
 	// Get file size
 	size, err := getFileSize(filePath)
 	if err != nil {
-		return domain.ImageFileParentless{}, err
+		return domain.ImageFile{}, err
 	}
 	imageFile.Size = size
 
 	// Get image dimension
 	dimension, err := getImageDimension(filePath)
 	if err != nil {
-		return domain.ImageFileParentless{}, err
+		return domain.ImageFile{}, err
 	}
 	imageFile.Dimension = dimension
 
