@@ -2,7 +2,7 @@ package image_file_local_file_repository
 
 import (
 	"os"
-	"wallshrink/domain"
+	"wompressor/domain"
 )
 
 func (r *imageFileLocalFileRepository) RemoveImageFile(imageFile domain.ImageFile) error {

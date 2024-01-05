@@ -4,7 +4,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
-	"wallshrink/domain"
+	"wompressor/domain"
 )
 
 func (r *imageSetLocalFileRepository) CopyImageFile(

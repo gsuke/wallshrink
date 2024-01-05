@@ -3,7 +3,7 @@ package image_file_local_file_repository
 import (
 	"errors"
 	"testing"
-	"wallshrink/domain"
+	"wompressor/domain"
 )
 
 func Test_parseFFmpegSSIMText(t *testing.T) {

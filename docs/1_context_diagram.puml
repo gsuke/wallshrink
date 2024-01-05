@@ -3,5 +3,5 @@
 actor user
 note top: compress wallpaper image files
 
-user -> (wallshrink)
+user -> (Wompressor)
 note top: CLI application

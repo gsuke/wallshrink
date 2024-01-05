@@ -1,8 +1,8 @@
 package cli
 
 import (
-	"wallshrink/infrastructure/localfile/repository/local_file_repository/image_file_local_file_repository"
-	"wallshrink/infrastructure/localfile/repository/local_file_repository/image_set_local_file_repository"
+	"wompressor/infrastructure/localfile/repository/local_file_repository/image_file_local_file_repository"
+	"wompressor/infrastructure/localfile/repository/local_file_repository/image_set_local_file_repository"
 
 	"github.com/samber/do"
 )

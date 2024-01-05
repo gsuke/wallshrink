@@ -2,7 +2,7 @@ package image_set_local_file_repository
 
 import (
 	"os"
-	"wallshrink/domain"
+	"wompressor/domain"
 )
 
 func (r *imageSetLocalFileRepository) PrepareTempImageSet() domain.ImageSet {

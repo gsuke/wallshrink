@@ -3,8 +3,8 @@ package image_file_local_file_repository
 import (
 	"fmt"
 	"os"
-	"wallshrink/domain"
-	repository "wallshrink/infrastructure/localfile/repository/local_file_repository"
+	"wompressor/domain"
+	repository "wompressor/infrastructure/localfile/repository/local_file_repository"
 
 	"github.com/samber/do"
 	ffmpeg "github.com/u2takey/ffmpeg-go"

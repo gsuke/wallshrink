@@ -3,8 +3,8 @@ package cli
 import (
 	"errors"
 	"log"
-	"wallshrink/application/usecase"
-	"wallshrink/domain"
+	"wompressor/application/usecase"
+	"wompressor/domain"
 
 	"github.com/spf13/cobra"
 )

@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"time"
-	"wallshrink/domain"
+	"wompressor/domain"
 
 	"gopkg.in/vansante/go-ffprobe.v2"
 )

@@ -3,7 +3,7 @@ package image_file_local_file_repository
 import (
 	"fmt"
 	"os"
-	"wallshrink/domain"
+	"wompressor/domain"
 )
 
 func getFileSize(path string) (int, error) {

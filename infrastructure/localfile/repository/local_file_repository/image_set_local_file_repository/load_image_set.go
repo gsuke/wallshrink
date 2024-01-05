@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"wallshrink/domain"
+	"wompressor/domain"
 
 	"github.com/samber/do"
 )

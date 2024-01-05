@@ -8,8 +8,8 @@ import (
 )
 
 var rootCmd = &cobra.Command{
-	Use:   "wallshrink",
-	Short: "Wallshrink compresses the directory of wallpaper images.",
+	Use:   "wompressor",
+	Short: "Wompressor compresses the directory of wallpaper images.",
 	Run:   run,
 }
 

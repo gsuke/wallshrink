@@ -1,7 +1,7 @@
 package image_set_local_file_repository
 
 import (
-	"wallshrink/domain"
+	"wompressor/domain"
 
 	"github.com/samber/do"
 )

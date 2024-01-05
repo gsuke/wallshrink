@@ -2,7 +2,7 @@ package image_file_local_file_repository
 
 import (
 	"fmt"
-	"wallshrink/domain"
+	"wompressor/domain"
 
 	ffmpeg "github.com/u2takey/ffmpeg-go"
 )

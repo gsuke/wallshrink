@@ -3,7 +3,7 @@ left to right direction
 
 actor user
 
-package wallshrink {
+package Wompressor {
     usecase "compress"
     note top
         * scale down

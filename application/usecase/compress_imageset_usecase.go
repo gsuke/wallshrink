@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"math"
 	"path/filepath"
-	"wallshrink/domain"
+	"wompressor/domain"
 
 	humanize "github.com/dustin/go-humanize"
 	"github.com/samber/do"

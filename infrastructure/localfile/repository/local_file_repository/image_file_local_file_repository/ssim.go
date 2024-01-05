@@ -6,7 +6,7 @@ import (
 	"os/exec"
 	"strconv"
 	"strings"
-	"wallshrink/domain"
+	"wompressor/domain"
 
 	"github.com/google/uuid"
 )

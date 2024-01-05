@@ -2,7 +2,7 @@ package image_file_local_file_repository
 
 import (
 	"path/filepath"
-	"wallshrink/domain"
+	"wompressor/domain"
 )
 
 func (r *imageFileLocalFileRepository) LoadImageFile(filePath string) (domain.ImageFile, error) {

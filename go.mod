@@ -1,4 +1,4 @@
-module wallshrink
+module wompressor
 
 go 1.21.4
 

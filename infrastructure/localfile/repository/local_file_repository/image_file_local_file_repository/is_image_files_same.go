@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"wallshrink/domain"
+	"wompressor/domain"
 )
 
 func (r *imageFileLocalFileRepository) IsFilesSame(filePath1 string, filePath2 string) (bool, error) {
