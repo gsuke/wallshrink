@@ -30,6 +30,19 @@ func CompressImageSetUseCase(sourcePath string, destinationPath string, scaleDow
 		return err
 	}
 
+	// Remove files from Destination ImageSet that are not in the Source ImageSet
+	targetImageFiles := []domain.ImageFile{}
+	for baseName, imageFile := range destinationImageSet.BaseNameToImageFileMap {
+		if _, ok := sourceImageSet.BaseNameToImageFileMap[baseName]; !ok {
+			targetImageFiles = append(targetImageFiles, imageFile)
+		}
+	}
+	for _, imageFile := range targetImageFiles {
+		delete(destinationImageSet.BaseNameToImageFileMap, imageFile.BaseName)
+		fmt.Printf("Deleted %s.\n", imageFile.FullPath())
+		imageFileRepository.RemoveImageFile(imageFile)
+	}
+
 	// Compress all image files
 	i := 0
 	for _, imageFile := range sourceImageSet.BaseNameToImageFileMap {
