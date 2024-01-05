@@ -30,6 +30,15 @@ func CompressImageSetUseCase(sourcePath string, destinationPath string, scaleDow
 		return err
 	}
 
+	// Src and dest must be different
+	isSameImageSets, err := imageSetRepository.IsSameImageSets(sourceImageSet, destinationImageSet)
+	if err != nil {
+		return err
+	}
+	if isSameImageSets {
+		return ErrSrcAndDestAreSame
+	}
+
 	// Remove files from Destination ImageSet that are not in the Source ImageSet
 	targetImageFiles := []domain.ImageFile{}
 	for baseName, imageFile := range destinationImageSet.BaseNameToImageFileMap {
