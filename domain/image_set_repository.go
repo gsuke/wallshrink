@@ -15,7 +15,7 @@ type ImageSetRepository interface {
 
 	// RemoveTempImageSet removes temporary ImageSet.
 	// The arg "tempImageSet" must be a temporary ImageSet.
-	RemoveTempImageSet(ImageSet) error
+	RemoveTempImageSet(ImageSet) []error
 
 	// IsSameImageSets reports whether imageSet1 and imageSet2 describe the same image set.
 	IsSameImageSets(ImageSet, ImageSet) (bool, error)

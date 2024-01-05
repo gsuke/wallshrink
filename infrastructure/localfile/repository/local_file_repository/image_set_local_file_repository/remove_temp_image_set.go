@@ -8,20 +8,24 @@ import (
 	"github.com/samber/do"
 )
 
-func (r *imageSetLocalFileRepository) RemoveTempImageSet(tempImageSet domain.ImageSet) error {
+func (r *imageSetLocalFileRepository) RemoveTempImageSet(tempImageSet domain.ImageSet) []error {
 	if tempImageSet.Path != os.TempDir() {
-		return fmt.Errorf("%w: \"%s\"", domain.ErrIsNotTemporaryImageSet, tempImageSet.Path)
+		return []error{fmt.Errorf("%w: \"%s\"", domain.ErrIsNotTemporaryImageSet, tempImageSet.Path)}
 	}
 
 	imageFileRepository := do.MustInvoke[domain.ImageFileRepository](nil)
 
+	errs := []error{}
 	for _, f := range tempImageSet.BaseNameToImageFileMap {
 		err := imageFileRepository.RemoveImageFile(f)
-		// TODO: Handle error in detail
 		if err != nil {
+			errs = append(errs, err)
 			fmt.Printf("[!] %s\n", err)
 		}
 	}
 
+	if len(errs) != 0 {
+		return errs
+	}
 	return nil
 }
