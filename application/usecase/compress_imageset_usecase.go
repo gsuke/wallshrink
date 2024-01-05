@@ -15,7 +15,7 @@ func CompressImageSetUseCase(sourcePath string, destinationPath string, scaleDow
 	imageFileRepository := do.MustInvoke[domain.ImageFileRepository](nil)
 
 	tempImageSet := imageSetRepository.PrepareTempImageSet()
-	defer imageSetRepository.RemoveTempImageSet(tempImageSet)
+	defer imageSetRepository.RemoveTempImageSet(tempImageSet) // TODO: delete temp files one at a time
 
 	// Source ImageSet
 	fmt.Printf("Load Directory: %s\n", sourcePath)
@@ -40,6 +40,8 @@ func CompressImageSetUseCase(sourcePath string, destinationPath string, scaleDow
 		return ErrSrcAndDestAreSame
 	}
 
+	// TODO: detect same stem
+
 	// Remove files from Destination ImageSet that are not in the Source ImageSet
 	targetImageFiles := []domain.ImageFile{}
 	for baseName, imageFile := range destinationImageSet.BaseNameToImageFileMap {
@@ -58,17 +60,27 @@ func CompressImageSetUseCase(sourcePath string, destinationPath string, scaleDow
 	for _, imageFile := range sourceImageSet.BaseNameToImageFileMap {
 		fmt.Printf("[%d/%d]\n", i+1, len(sourceImageSet.BaseNameToImageFileMap))
 
-		// Attempted compression: quality 50 -> 100
-		for _, quality := range []int{50, 70, 80, 90, 95, 100, -1} {
+		// Attempted compression
+		// 0: lossless
+		// -1: error
+		for _, quality := range []int{75, 85, 95, 100, 0, -1} {
 			if quality == -1 {
 				return ErrSSIMShortage
 			}
 
-			fmt.Printf(
-				" [quality=%d] Attempting compression: %s\n",
-				quality,
-				imageFile.BaseName.String(),
-			)
+			// Display message
+			if quality == 0 {
+				fmt.Printf(
+					" [lossless]: %s\n",
+					imageFile.BaseName.String(),
+				)
+			} else {
+				fmt.Printf(
+					" [quality=%d] Attempting compression: %s\n",
+					quality,
+					imageFile.BaseName.String(),
+				)
+			}
 
 			// Compress temporarily
 			compressedImageFile, err := imageFile.CompressTemp(tempImageSet, scaleDownDimension, quality)
@@ -81,7 +93,7 @@ func CompressImageSetUseCase(sourcePath string, destinationPath string, scaleDow
 			ssim, _ := imageFileRepository.SSIM(imageFile, compressedImageFile)
 			fmt.Printf(" SSIM: %f\n", ssim)
 
-			if ssim > 0.98 {
+			if ssim > 0.99 {
 				fmt.Printf(
 					" SSIM OK! %s[100%%] -> %s[%d%%]\n",
 					humanize.IBytes(uint64(imageFile.Size)),
