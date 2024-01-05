@@ -7,17 +7,18 @@ object Path
 object ImageFile
 object Size
 object Dimension
+object ParentImageSetPath
 
-object FileName
-object FileStem
-object FileExtension
+object BaseName
+object Stem
+object Extension
 
 object SSIM
 
 note top of ImageSet: is directory
 
 note right of Size: unit is "Bytes"
-note right of FileExtension: includes "."
+note right of Extension: includes "."
 note right of Dimension: width * height
 
 ImageSet "1"--"1" Path
@@ -25,9 +26,10 @@ ImageSet "1"--"*" ImageFile
 
 ImageFile "1"--"1" Size
 ImageFile "1"--"1" Dimension
-ImageFile "1"--"1" FileName
+ImageFile "1"--"1" BaseName
+ImageFile "1"--"1" ParentImageSetPath
 
-FileName "1"--"1" FileStem
-FileName "1"--"0..1" FileExtension
+BaseName "1"--"1" Stem
+BaseName "1"--"1" Extension
 
 SSIM "1"--"2" ImageFile

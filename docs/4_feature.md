@@ -1,17 +1,19 @@
 # Feature
 
-## Specify target image files
+## Compress use case
+
+### 1. Specify target image files
 
 * Specify the target image files **by directory**, and the destination directory.
 * Additionally, specify the dimension (width \* height) to scale down.
 
-## Compress
+### 2. Compress
 
 * Scale down: scale down the input image to the specified dimension.
 * Convert image file format: to `.webp`.
 * Reduce the quality: determine the quality with reference to SSIM.
 
-## Check the results
+### 3. Check the results
 
 Display the following
 

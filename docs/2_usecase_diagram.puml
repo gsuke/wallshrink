@@ -4,23 +4,25 @@ left to right direction
 actor user
 
 package wallshrink {
-    usecase "specify target image files" as specify
-    note right: specify by directory
-
     usecase "compress"
-    note right
+    note top
         * scale down
         * convert image file format
         * reduce the quality
     endnote
 
-    usecase "check the results" as check
-    note right
+    usecase "Specify target image files" as specify
+    note bottom: specify by directory
+
+    usecase "Check the results" as check
+    note bottom
         * show files that have changed
         * SSIM
         * file size (data compression ratio)
     endnote
+
+    compress ..> specify : include
+    compress ..> check : include
 }
 
-user --> specify
-user --> check
+user --> compress
