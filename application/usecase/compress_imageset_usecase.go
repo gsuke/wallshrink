@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math"
 	"path/filepath"
+	"strings"
 	"wompressor/domain"
 
 	humanize "github.com/dustin/go-humanize"
@@ -40,7 +41,13 @@ func CompressImageSetUseCase(sourcePath string, destinationPath string, scaleDow
 		return ErrSrcAndDestAreSame
 	}
 
-	// TODO: detect same stem
+	// detect duplicate stem
+	if err = detectDuplicateStem(sourceImageSet); err != nil {
+		return err
+	}
+	if err = detectDuplicateStem(destinationImageSet); err != nil {
+		return err
+	}
 
 	// Remove files from Destination ImageSet that are not in the Source ImageSet
 	targetImageFiles := []domain.ImageFile{}
@@ -132,4 +139,24 @@ func CompressImageSetUseCase(sourcePath string, destinationPath string, scaleDow
 	}
 
 	return nil
+}
+
+func detectDuplicateStem(imageSet domain.ImageSet) error {
+	stemToImageFilesMap := imageSet.GetDuplicateStemFiles()
+	if len(stemToImageFilesMap) == 0 {
+		return nil
+	}
+
+	// Prepare error message
+	var sb strings.Builder
+	for stem, imageFiles := range stemToImageFilesMap {
+		sb.WriteString("\n")
+		sb.WriteString(stem)
+		sb.WriteString(": ")
+		for _, imageFile := range imageFiles {
+			sb.WriteString(imageFile.BaseName.String())
+			sb.WriteString(", ")
+		}
+	}
+	return fmt.Errorf("%w%s", ErrThereAreDuplicateStemFiles, sb.String())
 }
