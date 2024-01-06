@@ -49,16 +49,17 @@ func CompressImageSetUseCase(sourcePath string, destinationPath string, scaleDow
 		return err
 	}
 
-	// Remove files from Destination ImageSet that are not in the Source ImageSet
+	// Remove files from destination image set that are not in the source image set
 	targetImageFiles := []domain.ImageFile{}
-	for baseName, imageFile := range destinationImageSet.BaseNameToImageFileMap {
-		if _, ok := sourceImageSet.BaseNameToImageFileMap[baseName]; !ok {
-			targetImageFiles = append(targetImageFiles, imageFile)
+	for baseName, destImageFile := range destinationImageSet.BaseNameToImageFileMap {
+		srcImageFiles := sourceImageSet.GetImageFilesByStem(baseName.Stem)
+		if len(srcImageFiles) == 0 {
+			targetImageFiles = append(targetImageFiles, destImageFile)
 		}
 	}
 	for _, imageFile := range targetImageFiles {
 		delete(destinationImageSet.BaseNameToImageFileMap, imageFile.BaseName)
-		fmt.Printf("Deleted %s.\n", imageFile.FullPath())
+		fmt.Printf("Deleted %s\n", imageFile.FullPath())
 		imageFileRepository.RemoveImageFile(imageFile)
 	}
 
@@ -70,7 +71,7 @@ func CompressImageSetUseCase(sourcePath string, destinationPath string, scaleDow
 		// Attempted compression
 		// 0: lossless
 		// -1: error
-		for _, quality := range []int{75, 85, 95, 100, 0, -1} {
+		for _, quality := range []int{85, 100, 0, -1} {
 			if quality == -1 {
 				return ErrSSIMShortage
 			}
@@ -124,7 +125,10 @@ func CompressImageSetUseCase(sourcePath string, destinationPath string, scaleDow
 					destinationImageSet, _, err = imageSetRepository.CopyImageFile(
 						compressedImageFile,
 						destinationImageSet,
-						imageFile.BaseName,
+						domain.BaseName{
+							Stem:      imageFile.BaseName.Stem,
+							Extension: ".webp",
+						},
 					)
 					if err != nil {
 						return err

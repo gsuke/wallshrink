@@ -5,6 +5,16 @@ type ImageSet struct {
 	BaseNameToImageFileMap map[BaseName]ImageFile // [Basename of the file] -> [ImageFile]
 }
 
+func (s *ImageSet) GetImageFilesByStem(stem string) []ImageFile {
+	imageFiles := []ImageFile{}
+	for baseName, imageFile := range s.BaseNameToImageFileMap {
+		if baseName.Stem == stem {
+			imageFiles = append(imageFiles, imageFile)
+		}
+	}
+	return imageFiles
+}
+
 // GetDuplicateStemFiles extracts duplicate stem files.
 func (s *ImageSet) GetDuplicateStemFiles() (stemToImageFilesMap map[string][]ImageFile) {
 	stemToBaseNamesMap := map[string][]BaseName{}
