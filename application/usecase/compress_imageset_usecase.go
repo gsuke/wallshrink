@@ -3,7 +3,6 @@ package usecase
 import (
 	"fmt"
 	"math"
-	"path/filepath"
 	"strings"
 	"wompressor/domain"
 
@@ -100,43 +99,64 @@ func CompressImageSetUseCase(sourcePath string, destinationPath string, scaleDow
 			// Calculate SSIM
 			ssim, _ := imageFileRepository.SSIM(imageFile, compressedImageFile)
 			fmt.Printf(" SSIM: %f\n", ssim)
+			if ssim < 0.99 {
+				continue
+			}
 
-			if ssim > 0.99 {
-				fmt.Printf(
-					" SSIM OK! %s[100%%] -> %s[%d%%]\n",
-					humanize.IBytes(uint64(imageFile.Size)),
-					humanize.IBytes(uint64(compressedImageFile.Size)),
-					int(math.Round(float64(compressedImageFile.Size)/float64(imageFile.Size)*100.0)),
-				)
+			// Calculate compression ratio: (compressed file size / src file size)
+			compressionRatio := int(math.Round(
+				float64(compressedImageFile.Size) / float64(imageFile.Size) * 100.0,
+			))
+			fmt.Printf(
+				" SSIM OK! %s[100%%] -> %s[%d%%]\n",
+				humanize.IBytes(uint64(imageFile.Size)),
+				humanize.IBytes(uint64(compressedImageFile.Size)),
+				compressionRatio,
+			)
 
-				// Compare 2 images
+			// replace if ratio < 100
+			// no replace if ratio >= 100
+			var resultImageFile domain.ImageFile
+			var destinationImageFileBaseName domain.BaseName
+			if compressionRatio < 100 {
+				resultImageFile = compressedImageFile
+				destinationImageFileBaseName = domain.BaseName{
+					Stem:      imageFile.BaseName.Stem,
+					Extension: ".webp",
+				}
+			} else {
+				resultImageFile = imageFile
+				destinationImageFileBaseName = imageFile.BaseName
+				fmt.Println(" Not compressed because the ratio exceeded 100%")
+			}
+
+			// Compare: src image <-> result image
+			// (check only if there is a same stem file in dest)
+			if len(destinationImageSet.GetImageFilesByStem(imageFile.BaseName.Stem)) > 0 {
 				isFilesSame, err := imageFileRepository.IsFilesSame(
-					compressedImageFile.FullPath(),
-					filepath.Join(destinationImageSet.Path, imageFile.BaseName.String()),
+					resultImageFile.FullPath(),
+					destinationImageSet.GetImageFilesByStem(imageFile.BaseName.Stem)[0].FullPath(),
 				)
 				if err != nil {
 					return err
 				}
-
-				// Copy compressed image file to destination directory
 				if isFilesSame {
 					fmt.Println(" Skip: no file replacement required")
-				} else {
-					destinationImageSet, _, err = imageSetRepository.CopyImageFile(
-						compressedImageFile,
-						destinationImageSet,
-						domain.BaseName{
-							Stem:      imageFile.BaseName.Stem,
-							Extension: ".webp",
-						},
-					)
-					if err != nil {
-						return err
-					}
+					break
 				}
-
-				break
 			}
+
+			// Copy compressed image file to destination directory
+			destinationImageSet, _, err = imageSetRepository.CopyImageFile(
+				resultImageFile,
+				destinationImageSet,
+				destinationImageFileBaseName,
+			)
+			if err != nil {
+				return err
+			}
+
+			break // SSIM OK
 		}
 
 		i++
